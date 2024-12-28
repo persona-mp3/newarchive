@@ -1,0 +1,27 @@
+label[for='email']{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    align-self: center;
+    justify-content: center;
+    gap: .3rem;
+}
+label > p{
+    align-self: center;
+    width: 50%;
+}
+
+label > input{
+    width: 50%;
+    align-self: center;
+    font-family: 'Montserrat', sans-serif;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
