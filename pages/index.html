@@ -21,7 +21,7 @@
         <div class="nav-link-container2">
             <input type="text" name="search" id="search">
             <label for="search" class="nav-link">Search</label>
-            <a href="/sign-up" class="nav-link sign-up">join us</a>
+            <a href="/signup" class="nav-link sign-up">join us</a>
             
         </div>
     </nav>
@@ -39,8 +39,8 @@
 
                 <div class="button-container">
 
-                    <button class="nav-link sign-up" >Sign up</button>
-                    <button class="nav-link sign-up" >Log in</button>
+                    <button class="nav-link sign-up" id="signupBtn" >Sign up</button>
+                    <button class="nav-link sign-up" id="loginBtn">Log in</button>
                 </div>
             </div>
             <div class="hero-image-container">
@@ -71,6 +71,17 @@
         </div>
     </div>
 
+
+    <script>
+        const signupBtn = document.getElementById('signupBtn');
+        const loginBtn = document.getElementById('loginBtn');
+
+        signupBtn.addEventListener('click', () => {
+            window.location.href = '/signup'
+        })
+
+        loginBtn.addEventListener('click', () => window.location.href = '/login')
+    </script>
 
     
 </body>

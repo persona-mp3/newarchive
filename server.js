@@ -3,11 +3,26 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const multer = require('multer')
-// const bodyParser = require('body-parser')
 
 //create server
 const app = express()
 const port = 3000;
+const URL = 'mongodb+srv://obscurepain:giorno@lostarchivecluster.ep0ds.mongodb.net/?retryWrites=true&w=majority&appName=lostarchivecluster';
+
+mongoose.connect(URL)
+    .then((result) => {
+        console.log('Database connected');
+        console.log()
+
+        app.listen(port, ()=>{
+            console.log(`Port ${port} active`)
+            console.log()
+            console.log(`home page: http://localhost:3000/`)
+            console.log(`login page: http://localhost:3000/login`)
+            console.log(`sign up page: http://localhost:3000/signup`)
+        })
+    })
+    .catch((err) => console.log(`error`, err))
 //handle form data
 const homeLink = 'http://localhost:3000/'
 app.use(express.static('public'));
@@ -21,7 +36,7 @@ app.use(express.urlencoded({ extended: true}))
 app.get('/', (req, res) => {
     res.status(200).sendFile('/pages/index.html', {root: __dirname})
 })
-app.get('/sign-up', (req, res) => {
+app.get('/signup', (req, res) => {
     res.status(200).sendFile('/pages/sign-up.html', {root: __dirname})
 })
 
@@ -44,7 +59,7 @@ app.post('/sign-up', upload.none(),    async (req, res) => {
         console.log(updatedUser)
         miniDB.push(updatedUser)
         console.log(miniDB)
-        res.redirect(308, '/login');
+        res.redirect(303, '/login');
         }catch{
             console.log(`Error`)
             res.status(500).send('Internal Server Error')
@@ -90,8 +105,8 @@ app.use((req, res) => {
     res.status(404).sendFile('/pages/404.html', {root: __dirname})
 })
 
-app.listen(port, ()=>{
-    console.log(`Port ${port} active`)
-    console.log(homeLink)
-})
+// app.listen(port, ()=>{
+//     console.log(`Port ${port} active`)
+//     console.log(homeLink)
+// })
 
