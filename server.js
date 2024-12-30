@@ -3,7 +3,7 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const multer = require('multer')
-const bodyParser = require('body-parser')
+// const bodyParser = require('body-parser')
 
 //create server
 const app = express()
@@ -13,6 +13,7 @@ const homeLink = 'http://localhost:3000/'
 app.use(express.static('public'));
 app.use(morgan('dev'));
 
+const miniDB = []
 
 app.use(express.urlencoded({ extended: true}))
 
@@ -24,14 +25,64 @@ app.get('/sign-up', (req, res) => {
     res.status(200).sendFile('/pages/sign-up.html', {root: __dirname})
 })
 
+app.get('/login', (req, res) => {
+    res.status(200).sendFile('/pages/login-page.html', {root: __dirname})
+})
+
 
 
 //form submission
 const upload = multer()
-app.post('/', upload.none(), (req, res) => {
-    console.log( `Form Received: `, req.body)
-    res.status(200).json({ message: 'Form submitted succesffully'})
+
+app.post('/sign-up', upload.none(),    async (req, res) => {
+    //generate salt --> selct password and hash --> combine both
+    try{
+        const salt = await bcrypt.genSalt();
+        const hasedPassword = await bcrypt.hash(req.body.password, salt);
+        const updatedUser = {email: req.body.email, password:hasedPassword};
+        console.log(`Updated User Info below`)
+        console.log(updatedUser)
+        miniDB.push(updatedUser)
+        console.log(miniDB)
+        res.redirect(308, '/login');
+        }catch{
+            console.log(`Error`)
+            res.status(500).send('Internal Server Error')
+        }
+
+
 })
+
+//handle login function 
+app.post('/login', upload.none(), async (req, res) =>{
+    //find with username
+    const user = await miniDB.find(user => user.email = req.body.email);
+
+    if(!user){
+        console.log('User not found')
+        return res.status(400).send(`Email address not found`);
+    }
+
+    //use brcypt.compare to compare passwords
+    try{
+        const match = await bcrypt.compare(req.body.password, user.password);
+
+        if (match){
+            console.log(`Login accepted`)
+            return res.redirect('/')
+        } else{
+                console.log('Invalid Credentials')
+                return res.status(401).send('Invalid Credentials')
+        }
+    
+    } catch{
+        res.status(500).send(`Internal Server Error`)
+    }
+})
+
+
+
+
 
 
 // 404 Handling
@@ -41,5 +92,6 @@ app.use((req, res) => {
 
 app.listen(port, ()=>{
     console.log(`Port ${port} active`)
+    console.log(homeLink)
 })
 
