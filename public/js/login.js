@@ -4,9 +4,10 @@
 //     const formData = new FormData(form);
 
 //     try{
-//     const response = await fetch('http://localhost:3000/login', {
+//     const response = await fetch('/login', {
 //         method: 'POST',
 //         body: formData,
+//         credentials: 'same-origin'
 //     });
 
 //     if (response.ok){
@@ -27,8 +28,8 @@
 // }
 
 // form.addEventListener('submit', (e) => {
-// e.preventDefault()
-// sendData()
+//     e.preventDefault()
+//     sendData()
 // })
 
 
